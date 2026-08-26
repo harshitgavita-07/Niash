@@ -123,7 +123,7 @@ export function ScheduledView({ onOpenRun, onRunNow, initialOpenId }: Props) {
     <Shell>
       <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">
-          <PanelHead title="Automations" sub="Recurring tasks OpenWorker runs on a schedule." />
+          <PanelHead title="Automations" sub="Recurring tasks Niash runs on a schedule." />
         </div>
         <button
           className="text-[13px] px-3 py-1.5 rounded-lg border border-lineStrong bg-panel hover:border-accent hover:text-accent shrink-0"
@@ -136,7 +136,7 @@ export function ScheduledView({ onOpenRun, onRunNow, initialOpenId }: Props) {
       <div className="text-[12px] text-faint flex gap-1.5 mb-4">
         <span aria-hidden>ⓘ</span>
         <span>
-          Runs only while openworker-server is up — a missed schedule catches up once when it next
+          Runs only while nish-server is up — a missed schedule catches up once when it next
           starts.
         </span>
       </div>
@@ -157,7 +157,7 @@ export function ScheduledView({ onOpenRun, onRunNow, initialOpenId }: Props) {
         !showForm && (
           <div className={CARD + " p-4 text-[13px] text-muted"}>
             No scheduled tasks yet — use a template above, click <strong>+ New automation</strong>,
-            or just ask OpenWorker in a session.
+            or just ask Niash in a session.
           </div>
         )
       ) : (

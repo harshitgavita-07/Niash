@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "OpenWorker",
+  "productName": "Niash",
   "version": "0.2.1",
   "identifier": "com.openworker.desktop",
   "build": {
@@ -19,7 +19,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
-    "publisher": "OpenWorker",
+    "publisher": "Niash",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -46,8 +46,8 @@
   "plugins": {
     "updater": {
       "endpoints": [
-        "https://download.openworker.com/latest.json",
-        "https://github.com/andrewyng/openworker/releases/latest/download/latest.json"
+        "https://download.niash.dev/latest.json",
+        "https://github.com/harshitgavita-07/Niash/releases/latest/download/latest.json"
       ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDVCNzEzRjY5OTkzNUNBNjkKUldScHlqV1phVDl4VzBvTnFLLytzaDkzNVd3WWNuUm8yNE95WTBFNnBtcGF1RENxeTRuNVhQeloK",
       "windows": {

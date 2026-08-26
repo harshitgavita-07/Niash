@@ -1017,7 +1017,7 @@ export function Sidebar(props: Props) {
             <Icon name="sidebar" size={16} />
           </button>
         )}
-        <div className="brand-wordmark text-[14px]">OpenWorker<span className="beta-tag">BETA</span></div>
+        <div className="brand-wordmark text-[14px]">Niash<span className="beta-tag">BETA</span></div>
       </div>
 
       {/* New session: a quiet nav row like its siblings (UX-040 — the filled accent block
@@ -1157,7 +1157,7 @@ export function Sidebar(props: Props) {
                 role="menu"
               >
                 {cloud?.signed_in ? (
-                  /* Just the email — being signed in to OpenWorker Cloud is implicit. */
+                  /* Just the email — being signed in to Niash Cloud is implicit. */
                   <div
                     className="px-3 py-1.5 mb-1 text-[11px] text-faint truncate border-b border-line"
                     title={accountEmail}
@@ -1167,7 +1167,7 @@ export function Sidebar(props: Props) {
                 ) : (
                   <>
                     <div className="px-3 py-1.5 text-[11px] text-faint border-b border-line">
-                      Not signed in — one-click connections need OpenWorker Cloud
+                      Not signed in — one-click connections need Niash Cloud
                     </div>
                     <button
                       className="w-full flex items-center gap-2.5 px-3 py-1.5 mb-1 text-[13px] text-left text-accent hover:bg-paper"
@@ -1185,7 +1185,7 @@ export function Sidebar(props: Props) {
                         });
                       }}
                     >
-                      <Icon name="plug" size={15} className="shrink-0" /> Sign in to OpenWorker
+                      <Icon name="plug" size={15} className="shrink-0" /> Sign in to Niash
                       Cloud
                     </button>
                   </>
@@ -1252,7 +1252,7 @@ export function Sidebar(props: Props) {
             {cloud?.signed_in && (
               <span
                 className="w-[7px] h-[7px] rounded-full bg-ok shrink-0"
-                title="Signed in to OpenWorker Cloud"
+                title="Signed in to Niash Cloud"
                 aria-hidden
               />
             )}

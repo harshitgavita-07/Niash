@@ -26,7 +26,7 @@ const fetch = (
 ): Promise<Response> => {
   const headers = new Headers(init.headers);
   const token = apiToken();
-  if (token) headers.set("X-OpenWorker-Token", token);
+  if (token) headers.set("X-Niash-Token", token);
   return globalThis.fetch(input, { ...init, headers });
 };
 
@@ -657,7 +657,7 @@ export interface Connector {
   installations?: GithubInstallation[]; // GitHub only: App installations (managed relay)
 }
 
-// --- OpenWorker Cloud (optional sign-in; manual token paste always works) ---
+// --- Niash Cloud (optional sign-in; manual token paste always works) ---
 
 export interface CloudStatus {
   signed_in: boolean;
@@ -2105,7 +2105,7 @@ export interface SlackMember {
 }
 
 // One channel from the workspace roster. Private channels appear only where the
-// bot is a member (Slack API constraint); is_member=false → "invite @OpenWorker" hint.
+// bot is a member (Slack API constraint); is_member=false → "invite @Niash" hint.
 export interface SlackChannelEntry {
   id: string;
   name: string;

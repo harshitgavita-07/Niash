@@ -98,7 +98,7 @@ def _browser_page(
     return (
         "<!doctype html><html><head><meta charset='utf-8'>"
         "<meta name='viewport' content='width=device-width, initial-scale=1'>"
-        f"<title>{_html.escape(title)} — OpenWorker</title><style>"
+        f"<title>{_html.escape(title)} — Niash</title><style>"
         ":root{--paper:#f6f5f2;--panel:#fff;--line:#e4e2dc;--ink:#2c2c2a;--muted:#6f6e68;"
         "--faint:#a3a19a;--accent:#3670b2;--ok:#2e7d4f;--ok-soft:#e3f2e9;--bad:#b3423a;"
         "--bad-soft:#f8e7e5}"
@@ -130,9 +130,9 @@ def _browser_page(
         "padding:7px 10px;margin-top:12px;text-align:left;word-break:break-word}"
         ".foot{font-size:10.5px;color:var(--faint)}"
         "</style></head><body>"
-        '<div class="card"><div class="mark"><i></i>OpenWorker</div>'
+        '<div class="card"><div class="mark"><i></i>Niash</div>'
         f"{icon}<h1>{_html.escape(title)}</h1><p>{_html.escape(detail)}</p>{err}</div>"
-        '<div class="foot">Served locally by OpenWorker on your Mac</div>'
+        '<div class="foot">Served locally by Niash on your Mac</div>'
         "</body></html>"
     )
 
@@ -147,7 +147,7 @@ def _connector_title(name: str) -> str:
 
 _CONNECT_FAILED_DETAIL = (
     "Something went wrong finishing this connection. "
-    "Close this tab and try again from OpenWorker."
+    "Close this tab and try again from Niash."
 )
 
 from ..attachments import (
@@ -226,7 +226,7 @@ def create_app(manager: SessionManager) -> FastAPI:
         ):
             return await call_next(request)
         return JSONResponse(
-            {"error": "missing or invalid OpenWorker sidecar token"},
+            {"error": "missing or invalid Niash sidecar token"},
             status_code=401,
         )
 
@@ -1225,7 +1225,7 @@ def create_app(manager: SessionManager) -> FastAPI:
             return HTMLResponse(
                 _browser_page(
                     "Sign-in failed",
-                    "The service reported an error. Return to OpenWorker and try again.",
+                    "The service reported an error. Return to Niash and try again.",
                     ok=False,
                     error=error,
                 ),
@@ -1235,7 +1235,7 @@ def create_app(manager: SessionManager) -> FastAPI:
             return HTMLResponse(
                 _browser_page(
                     "Nothing waiting for this sign-in",
-                    "The sign-in may have timed out. Return to OpenWorker and start it again.",
+                    "The sign-in may have timed out. Return to Niash and start it again.",
                     ok=False,
                 ),
                 status_code=400,
@@ -1243,7 +1243,7 @@ def create_app(manager: SessionManager) -> FastAPI:
         return HTMLResponse(
             _browser_page(
                 "Connected",
-                "Sign-in complete. You can close this tab and return to OpenWorker.",
+                "Sign-in complete. You can close this tab and return to Niash.",
                 ok=True,
             )
         )
@@ -1461,7 +1461,7 @@ def create_app(manager: SessionManager) -> FastAPI:
         action = str((body or {}).get("action", "")).strip()
         return await manager.resolve_unauthorized(name, item_id, action)
 
-    # -- OpenWorker Cloud: sign-in + managed one-click connect ---------------
+    # -- Niash Cloud: sign-in + managed one-click connect ---------------
     # All optional: the app is fully functional signed out (manual token paste
     # stays available for every connector, before and after sign-in).
 
@@ -1511,7 +1511,7 @@ def create_app(manager: SessionManager) -> FastAPI:
         from ..config import load_config
 
         signin_failed_detail = (
-            "Close this tab and try signing in again from OpenWorker."
+            "Close this tab and try signing in again from Niash."
         )
         if error:
             return HTMLResponse(
@@ -1552,8 +1552,8 @@ def create_app(manager: SessionManager) -> FastAPI:
         return HTMLResponse(
             _browser_page(
                 "Signed in",
-                "You're signed in to OpenWorker Cloud. "
-                "You can close this tab and return to OpenWorker.",
+                "You're signed in to Niash Cloud. "
+                "You can close this tab and return to Niash.",
             )
         )
 
@@ -1644,7 +1644,7 @@ def create_app(manager: SessionManager) -> FastAPI:
             return HTMLResponse(
                 _browser_page(
                     "GitHub connected",
-                    "You can close this tab and return to OpenWorker.",
+                    "You can close this tab and return to Niash.",
                     connector="github",
                 )
             )
@@ -1707,7 +1707,7 @@ def create_app(manager: SessionManager) -> FastAPI:
         return HTMLResponse(
             _browser_page(
                 f"{_connector_title(connector)} connected",
-                "You can close this tab and return to OpenWorker.",
+                "You can close this tab and return to Niash.",
                 connector=connector,
             )
         )

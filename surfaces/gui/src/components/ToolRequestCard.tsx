@@ -38,7 +38,7 @@ export function ToolRequestCard({
             {item.summary && <span className="toolreq-fact">{item.summary}</span>}
           </div>
           <div className="toolreq-explain">
-            OpenWorker installs its own verified copy
+            Niash installs its own verified copy
             {item.source ? ` from ${item.source}` : ""} — or install it yourself and
             continue.
           </div>
@@ -46,7 +46,7 @@ export function ToolRequestCard({
       ) : (
         <div className="toolreq-facts">
           <div className="toolreq-explain">
-            OpenWorker has no verified build for this machine — install it yourself if you
+            Niash has no verified build for this machine — install it yourself if you
             want this check, or continue and the coworker will note the gap.
           </div>
         </div>

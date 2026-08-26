@@ -75,7 +75,7 @@ interface Props {
   teamChatEnabled?: boolean;
   teamChatUnread?: number;
   onOpenTeamChat?: () => void;
-  onOpenWorker?: (s: SessionInfo) => void;
+  onNiash?: (s: SessionInfo) => void;
   // Bumped when a [.](board:) chip in the transcript is clicked — expands the Board section.
   openBoardKey?: number;
 }
@@ -104,7 +104,7 @@ export function RightRail({
   teamChatEnabled = false,
   teamChatUnread = 0,
   onOpenTeamChat,
-  onOpenWorker,
+  onNiash,
   openBoardKey = 0,
 }: Props) {
   // Seventeenth pass: every panel starts collapsed and nothing auto-expands — a count
@@ -308,7 +308,7 @@ export function RightRail({
                     className="rail-team-row"
                     key={w.session_id}
                     data-testid={`team-row-${w.team?.actor || w.session_id}`}
-                    onClick={() => onOpenWorker?.(w)}
+                    onClick={() => onNiash?.(w)}
                     title={`Open ${w.team?.actor || "worker"}'s session`}
                   >
                     <span className={"team-dot " + (w.team?.status || "idle")} />
@@ -498,7 +498,7 @@ function ProgressSummary({ running, toolNames, todo }: { running: boolean; toolN
   }
   return (
     <div className="rail-muted">
-      For longer multi-step tasks, progress will appear here while OpenWorker plans, uses tools, waits for approval, and produces artifacts.
+      For longer multi-step tasks, progress will appear here while Niash plans, uses tools, waits for approval, and produces artifacts.
     </div>
   );
 }
