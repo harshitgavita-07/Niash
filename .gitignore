@@ -6,6 +6,7 @@ __pycache__/
 build/
 dist/
 .coverage
+htmlcov/
 
 # Local secrets (live-smoke BYO keys) — never committed
 .env
@@ -13,3 +14,12 @@ dist/
 
 # Generated config files
 config/
+
+# Node
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

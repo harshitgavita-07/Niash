@@ -1,121 +1,203 @@
 # Niash
 
-**[niash.dev](https://niash.dev)** · [Download](#download) · [Issues](https://github.com/harshitgavita-07/Niash/issues)
+**Human–AI shared control for your computer.**
 
-<a href="https://trendshift.io/repositories/91434?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-91434" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/91434/daily?language=Python" alt="andrewyng%2Fopenworker | Trendshift" width="250" height="55"/></a>
+[Issues](https://github.com/harshitgavita-07/Niash/issues) · [Development](#development) · [Testing](#testing)
 
-> **Beta** - Niash is in open beta: fully usable, updates itself, and we're actively polishing rough edges. [Issues](https://github.com/harshitgavita-07/Niash/issues) welcome.
+## What is Niash?
 
-**AI that gets your everyday tasks done.** Niash is an open-source AI coworker that lives on your desktop and delivers **finished work**, not just chat: a polished document, a Slack reply with the numbers, an updated calendar, a triaged inbox.
+Niash is a shared-control layer that lets humans and AI work on the same computer at the same time.
 
-It runs on your machine and doesn't lock you into any model: bring your own API key for OpenAI, Anthropic, Google, or an open-weight provider, or run fully local with Ollama. Your data leaves your machine only through the model and integrations *you* choose.
+Today, when you give an AI a task, it takes control of your computer — you wait. Niash changes this: the human keeps working while the AI works alongside them, with built-in priority when physical interaction conflicts arise.
 
-[![How Niash works](docs/assets/how-it-works.png)](https://niash.dev)
+## The Problem
 
-## Download
+```
+Current model:
+  Human gives AI a task → AI takes control → Human waits → AI finishes
 
-[**⬇ macOS (Apple Silicon)**](https://download.openworker.com/mac)
-<sub>macOS 12+ · signed & notarized · auto-updates</sub>
-
-[**⬇ Windows 10/11 (x64)**](https://download.openworker.com/windows)
-<sub>builds are not yet code-signed, so SmartScreen will warn; signing is in progress</sub>
-
-Open the app, add a model key (or point it at Ollama), and ask for something real.
-
-## How it works
-
-1. Tell Niash the outcome you want - "prepare a customer brief," "untangle my calendar," "draft a report," "check where the release stands across Jira and GitHub."
-2. It breaks the task into steps and works across your desktop, files, and connected apps.
-3. Before anything consequential - sending a message, changing a calendar, running a command - it checks in and you approve or redirect.
-4. You get the finished deliverable, not a to-do list.
-
-Under the hood:
-
-```text
-┌────────────────────────────────────────────────┐
-│               Niash desktop app               │  native shell + GUI
-├────────────────────────────────────────────────┤
-│           local agent server (Python)          │  engine · tools · connectors - built on aisuite
-├───────────────┬────────────────┬───────────────┤
-│  your files   │   your tools   │  your model   │  everything runs with your keys,
-│  & terminal   │ 25+ connectors │  any provider │  on your machine
-└───────────────┴────────────────┴───────────────┘
+Niash model:
+  Human works  ↕  AI works  ↕  Shared computer
 ```
 
-## What it can do
+When AI needs to use your keyboard, mouse, or screen, Niash mediates access — giving you priority when you're physically interacting, and letting background tasks continue when you're not.
 
-- **Produce real deliverables** - documents, spreadsheets, reports, and web pages land as files you can open and share.
-- **Work from Slack** - mention `@Niash` in a channel; a session opens on your desktop, the work happens with your tools, and the answer comes back as a thread reply.
-- **Use your everyday tools** - 25+ integrations including GitHub, Slack, Jira, Notion, Linear, HubSpot, Outlook, monday.com, Gmail, and Google Calendar, plus your **terminal and local files**. Any tool reachable over [MCP](https://modelcontextprotocol.io/) plugs in too, with per-tool control.
-- **Run on a schedule** - automations for recurring work: a morning brief, a weekly report, a standing watch over a channel. Runs land in the app with full transcripts.
-- **Ask before acting** - writes, sends, and shell commands are approval-gated. Unattended runs park their asks in an inbox instead of acting on their own.
+## Core Idea
 
-## Bring your own model
+> Humans and AI should be able to work on the same computer at the same time.
 
-Model access is yours: pick a provider, paste your key, switch anytime. Supported out of the box:
+Niash builds on an existing agent/desktop execution foundation to add:
 
-**OpenAI · Anthropic · Google Gemini · BytePlus Ark · Volcengine Ark Agent Plan · Inkling (Thinking Machines) · GLM (Z.ai) · DeepSeek · Kimi (Moonshot) · Qwen · MiniMax · Mistral · Grok (xAI)** - plus open-weight models via **Together** and **Fireworks**, and fully local models via **Ollama**.
+- **Human presence awareness** — detect when you're actively using the computer
+- **Shared resource arbitration** — coordinate terminal, file, and application access
+- **Human priority** — yield to physical input automatically
+- **Background task continuity** — AI works while you work
+- **Safe interruption** — pause and resume without data loss
+- **Verification** — review actions before they execute
 
-A curated model list marks what we've verified for tool-calling work. Adding any model string works at your own risk.
+## Architecture
 
-## Privacy
+```
+Human
+   ↕
+Niash shared-control layer
+   ↕
+AI agents
+   ↕
+Computer
+```
 
-Niash is local-first. Everything lives on your machine: the agent loop, your conversations, connector tokens, and model keys - all in the app's local secret store. The only cloud piece is a small service that brokers OAuth handshakes for connectors. You can always use the App without signing-in - use the connectors via manually-created credentials/API-keys.
+**Human presence** — tracks mouse/keyboard activity to detect when the human is actively using the computer.
 
-## Run from source
+**Computer context** — accesses filesystem, terminal, browser, and application state.
 
-Prerequisites: Python 3.10+, Node 20+, and (for the desktop shell) the Rust toolchain via [rustup](https://rustup.rs/).
+**Interaction arbitration** — coordinates concurrent access between human and AI agents.
 
-```shell
-git clone https://github.com/andrewyng/openworker
-cd openworker
+**Background agent tasks** — runs AI work in the background without blocking the human.
 
-# 1. One-time bootstrap - creates the Python venv at .venv
-#    (on Windows, run from Git Bash or WSL)
+**Physical vs non-physical actions** — distinguishes between actions that need physical input (typing, clicking) and those that don't (file writes, API calls).
+
+**Verification** — reviews and approves actions before execution.
+
+**Safety/governance** — enforces permissions, workspace scoping, and approval gates.
+
+## Current Status
+
+### Complete
+
+- Agent runtime with multi-turn conversation and tool calling
+- 25+ connectors (GitHub, Slack, Jira, Gmail, Google Calendar, Notion, etc.)
+- MCP (Model Context Protocol) support for external tool servers
+- Auto-approve reviewer for safety
+- Voice input (local Whisper transcription)
+- Desktop app (Tauri shell with system tray, auto-update)
+- Scheduled automations (cron-based)
+- Memory system (persistent across sessions)
+- Multi-agent teams with board and chat
+- Persona system (configurable coworker personalities)
+
+### In Progress
+
+- Human activity awareness
+- Shared resource arbitration
+- Background task coexistence
+
+### Planned
+
+- Advanced cursor intelligence
+- Reaction engine
+- Agent swarm coordination
+- Enhanced memory architecture
+- Cross-platform optimization
+
+## MVP
+
+The first MVP delivers: **a human can continue working while an AI task runs in the background, and when AI needs physical computer interaction, Niash mediates access with human priority.**
+
+## Why Niash?
+
+Most AI tools follow a turn-based model: you ask, it works, you wait. This breaks down when:
+
+- You need to keep working while AI handles a task
+- AI and human need to use the same resources simultaneously
+- Background tasks should continue without blocking interaction
+
+Niash solves this by treating the computer as a shared workspace rather than a exclusive lock.
+
+## Development
+
+### Prerequisites
+
+- Python 3.10+
+- Node.js 20+
+- Rust toolchain (via [rustup](https://rustup.rs/)) — for desktop shell
+
+### Setup
+
+```bash
+git clone https://github.com/harshitgavita-07/Niash
+cd Niash
+
+# One-time bootstrap — creates Python venv at .venv
 bash packaging/setup_dev_env.sh
 
-# 2. Start the local agent server
-.venv/bin/openworker-server --cwd ~/some/project --port 8765
-#    (Windows: .venv\Scripts\openworker-server.exe)
+# Start the local agent server
+.venv/bin/niash-server --cwd ~/some/project --port 8765
+# Windows: .venv\Scripts\niash-server.exe
 
-# 3. In a second terminal, start the UI
+# In a second terminal, start the GUI
 cd surfaces/gui
 npm install
-npm run dev        # browser UI on the Vite dev port
+npm run dev        # browser UI on Vite dev port
 ```
 
-The standalone server creates a per-launch token at
-`<state-dir>/sidecar-8765.token`; Vite reads that user-only file when it starts.
-For direct API calls, send its value in the `X-Niash-Token` header. The
-desktop app uses an in-memory launch token instead and never writes it to disk.
+### Desktop App
 
-To run the full desktop app instead of the browser UI, replace step 3 with `npm run tauri dev` (from `surfaces/gui/`) - the Tauri shell launches the window and supervises the server itself.
+For the full desktop app instead of browser UI:
 
-Tests: `.venv/bin/pytest` (server), `npm test` and `npm run e2e` in `surfaces/gui` (GUI unit + hermetic end-to-end). Desktop bundles are built with `packaging/build_dmg.sh` / `packaging/build_windows.ps1`.
+```bash
+cd surfaces/gui
+npm run tauri dev   # Tauri shell launches window + server
+```
 
-## Repository layout
+### Run from Source
+
+The standalone server creates a per-launch token at `<state-dir>/sidecar-8765.token`. For direct API calls, send its value in the `X-Niash-Token` header.
+
+## Testing
+
+### Backend Tests
+
+```bash
+# From project root
+pytest tests/ -q
+
+# Specific test file
+pytest tests/test_engine.py -q
+```
+
+### GUI Unit Tests
+
+```bash
+cd surfaces/gui
+npm test
+```
+
+### GUI E2E Tests
+
+```bash
+cd surfaces/gui
+npm run e2e
+```
+
+### Current Baseline
+
+- Backend: ~111 passed, ~6 failed (environment-specific: Windows `time.tzset`, MCP path issues)
+- GUI: Tests available but require Playwright setup
+
+## Repository Layout
 
 | Directory | What's in it |
 |---|---|
-| `coworker/` | Python backend - agent engine, model providers, connectors, MCP client, memory, automations |
-| `surfaces/gui/` | Desktop app - React UI + Tauri shell that supervises the server |
-| `stt/` | Speech-to-text sidecar (Rust) for voice input |
-| `packaging/` | Installer builds (macOS DMG, Windows), auto-update manifest, dev bootstrap |
-| `docs/` | Design specs and decision logs |
+| `coworker/` | Python backend — agent engine, providers, connectors, MCP, memory, automations |
+| `surfaces/gui/` | Desktop app — React UI + Tauri shell |
+| `stt/` | Speech-to-text sidecar (Rust) |
+| `packaging/` | Installer builds, auto-update, dev bootstrap |
+| `docs/` | Design specs, audit, baseline docs |
 | `tests/` | Backend test suite |
+| `scripts/` | Corpus building, reviewer evaluation |
 
-## Built on aisuite
+## Roadmap
 
-Niash's engine is built on [**aisuite**](https://github.com/andrewyng/aisuite), a lightweight Python library providing a unified chat-completions API across LLM providers and an agents layer with tools, toolkits, and MCP support. If you want to build your own agent harness rather than use ours, start there; this repo is a working reference for what aisuite can carry.
-
-Niash was originally developed inside the aisuite repository before moving to its own home here; thanks to the aisuite contributors whose work it builds on.
-
-## Contributing
-
-Contributions and bug reports are welcome - open an [issue](https://github.com/harshitgavita-07/Niash/issues) or a pull request. The app updates itself, so fixes reach installs quickly.
-For any PR, please attach screenshots of what was broken and how it is fixed now. We will shortly add features that you can contribute to.
-Please note that we are actively developing based off a internal list and goal, so we may not approve PRs that add features that are already under-development or deviates from our vision.
+1. **Shared interaction MVP** — human and AI work concurrently
+2. **Background task coexistence** — AI tasks run without blocking
+3. **Context-aware interaction** — AI adapts to human presence
+4. **Better human/AI coordination** — seamless handoff
+5. **Persistent workflows** — long-running background tasks
+6. **Cross-platform support** — optimized for each OS
 
 ## License
 
-MIT - see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
+
+Niash builds on an existing agent/desktop execution foundation. See [docs/NIASH_BASELINE.md](docs/NIASH_BASELINE.md) for architecture details and attribution.

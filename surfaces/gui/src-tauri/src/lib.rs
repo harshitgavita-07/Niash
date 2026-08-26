@@ -1,7 +1,7 @@
 //! Niash desktop shell.
 //!
 //! Tauri is a thin native window over the existing React SPA. It:
-//!   1. picks a free localhost port and starts the Python `openworker-server` as a managed
+//!   1. picks a free localhost port and starts the Python `niash-server` as a managed
 //!      sidecar on that port (so it never clashes with a hand-run server on 8765);
 //!   2. injects the sidecar HTTP/WS addresses and per-launch authentication token before the
 //!      SPA loads (single codebase — the browser build still hits 8765);
@@ -172,7 +172,7 @@ fn sidecar_env() -> std::collections::HashMap<String, String> {
 ///   2. The bundled onedir sidecar shipped via Tauri `resources` (production): the
 ///      `sidecar/` folder lands in Contents/Resources on macOS and in the install dir
 ///      (next to the app exe) on Windows.
-///   3. Legacy onefile slot: `openworker-server[.exe]` next to the app binary (pre-onedir
+///   3. Legacy onefile slot: `niash-server[.exe]` next to the app binary (pre-onedir
 ///      builds used Tauri externalBin).
 ///   4. Dev fallback: the repo venv, relative to this crate (`src-tauri` → repo-root `.venv`;
 ///      `bin/` on POSIX, `Scripts\` on Windows).
@@ -181,9 +181,9 @@ fn server_bin() -> PathBuf {
         return PathBuf::from(p);
     }
     let exe_name = if cfg!(windows) {
-        "openworker-server.exe"
+        "niash-server.exe"
     } else {
-        "openworker-server"
+        "niash-server"
     };
     if let Ok(exe) = std::env::current_exe() {
         if let Some(dir) = exe.parent() {
@@ -203,9 +203,9 @@ fn server_bin() -> PathBuf {
     }
     let mut p = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     if cfg!(windows) {
-        p.push("../../../.venv/Scripts/openworker-server.exe");
+        p.push("../../../.venv/Scripts/niash-server.exe");
     } else {
-        p.push("../../../.venv/bin/openworker-server");
+        p.push("../../../.venv/bin/niash-server");
     }
     p
 }
@@ -607,7 +607,7 @@ fn show_main(app: &tauri::AppHandle) {
 // else — no global plugin JS): check, background pre-download, install. Update
 // artifacts are minisign-verified against the pubkey in tauri.conf.json before
 // anything is installed; the manifest lives at the endpoints configured there
-// (download.openworker.com → GitHub Releases).
+// (download.niash.dev → GitHub Releases).
 
 #[derive(serde::Serialize)]
 struct UpdateInfo {
@@ -693,7 +693,7 @@ async fn install_update(
     }
     // Windows never reaches here (the NSIS installer takes over and relaunches).
     // macOS: the .app was swapped in place — restart into the new version. The tray
-    // Exit path's sidecar kill runs via RunEvent, so no orphaned openworker-server.
+    // Exit path's sidecar kill runs via RunEvent, so no orphaned niash-server.
     app.restart();
 }
 
